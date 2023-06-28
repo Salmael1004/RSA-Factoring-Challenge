@@ -1,0 +1,55 @@
+#!/usr/bin/python3
+import sys
+
+
+def is_prime(number):
+    """Check if a number is prime.
+    Args:
+        number (int): The number to check.
+    Returns:
+        bool: True if the number is prime, False otherwise.
+    """
+    if number < 2:
+        return False
+    for i in range(2, int(number ** 0.5) + 1):
+        if number % i == 0:
+            return False
+    return True
+
+
+def factorize_number(number):
+    """Factorize a number into a product of two smaller numbers.
+    Args:
+        number (int): The number to factorize.
+    Returns:
+        tuple: A tuple containing the two factors.
+    """
+    if number % 2 == 0:
+        return number // 2, 2
+    for i in range(3, number, 2):
+        if number % i == 0:
+            factor = number // i
+            if is_prime(factor) and is_prime(i):
+                return factor, i
+
+
+def main():
+    try:
+        file_name = sys.argv[1]
+    except IndexError:
+        print("Usage: ./factorize <file>")
+        exit()
+
+    with open(file_name) as file:
+        for line in file:
+            n = int(line.strip())
+            print("{:d}=".format(n), end="")
+            factors = factorize_number(n)
+            if factors:
+                print("{}*{}".format(factors[0], factors[1]))
+            else:
+                print("Cannot be factorized further")
+
+
+if __name__ == "__main__":
+    main()
